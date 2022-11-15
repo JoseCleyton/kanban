@@ -1,7 +1,7 @@
 import { Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Card } from '@app/model/card.model';
+import { Card } from '../../../../../model/card.model';
 
 @Component({
   selector: 'app-delete-card',

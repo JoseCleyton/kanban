@@ -1,0 +1,11 @@
+::ng-deep {
+  #btn-update {
+    background-color: black;
+    color: white;
+  }
+  #btn-update:disabled {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+  }
+}

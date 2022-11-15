@@ -1,331 +1,120 @@
-<mat-card id="container-principal" class="mt-1">
+<mat-card class="font-bold mt-1">
   <div class="row">
     <div class="col">
-      <mat-card class="card">
-        <div class="row">
-          <div class="d-flex justify-content-between align-items-center">
-            <span>New Card</span>
-            <button
-              mat-icon-button
-              aria-label="New card"
-              (click)="actionNewCard()"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
+      <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
+          <span>New Card</span>
+          <button
+            mat-icon-button
+            aria-label="New card"
+            (click)="actionNewCard()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
         </div>
-      </mat-card>
+      </div>
     </div>
     <div class="col">
-      <mat-card class="card">
-        <div class="row">
-          <div class="d-flex justify-content-between align-items-center">
-            <span>TO DO</span>
-            <button mat-icon-button aria-label="New Card">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
-          </div>
-
-          <div class="col-12 mt-1">
-            <mat-card
-              class="card-{{
-                selectedCard?.id !== cardTodo?.id ? 'gray' : 'white'
-              }} mt-2"
-              *ngFor="let cardTodo of cardsToDo"
-            >
-              <ng-container
-                *ngIf="selectedCard?.id !== cardTodo?.id; else input"
-              >
-                <div class="row">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <h3>{{ cardTodo?.titulo }}</h3>
-
-                    <div class="d-flex justify-content-end">
-                      <button
-                        mat-icon-button
-                        aria-label="Edit Card"
-                        (click)="selectCard(cardTodo)"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button
-                        mat-icon-button
-                        aria-label="Delete Card"
-                        (click)="deleteCard(cardTodo)"
-                      >
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-
-                  <p>{{ cardTodo?.conteudo }}</p>
-
-                  <div class="d-flex justify-content-between">
-                    <button
-                      mat-icon-button
-                      (click)="changeStepBefore(cardTodo)"
-                    >
-                      <mat-icon>chevron_left</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="changeStepAfter(cardTodo)">
-                      <mat-icon>chevron_right</mat-icon>
-                    </button>
-                  </div>
-                </div>
-              </ng-container>
-
-              <ng-template #input>
-                <form [formGroup]="formUpdateCard">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <mat-form-field>
-                      <input
-                        formControlName="title"
-                        placeholder="Title"
-                        matInput
-                      />
-                    </mat-form-field>
-
-                    <button
-                      mat-icon-button
-                      aria-label="Edit Card"
-                      (click)="deSelect()"
-                    >
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  </div>
-
-                  <mat-form-field>
-                    <textarea
-                      placeholder="Content"
-                      matInput
-                      formControlName="content"
-                    ></textarea>
-                  </mat-form-field>
-
-                  <div class="d-flex justify-content-between">
-                    <button mat-button>Close</button>
-                    <button mat-button id="btn-update" (click)="updateCard()">
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </ng-template>
-            </mat-card>
-          </div>
+      <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
+          <span>TO DO</span>
+          <button mat-icon-button aria-label="New Card">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
         </div>
-      </mat-card>
+
+        <div class="col-12 mt-1">
+          <mat-card class="mt-2" *ngFor="let cardToDo of cardsToDo">
+            <ng-container *ngIf="selectedCard?.id !== cardToDo?.id; else input">
+              <app-card-header
+                [card]="cardToDo"
+                (selectedCard)="selectCard($event)"
+                (deleteSelectedCard)="deleteCard($event)"
+              ></app-card-header>
+
+              <div class="row mt-4">
+                <p>{{ cardToDo?.conteudo }}</p>
+              </div>
+
+              <app-card-footer
+                [card]="cardToDo"
+                (changeStepCardAfter)="changeStepAfter($event)"
+              ></app-card-footer>
+            </ng-container>
+          </mat-card>
+        </div>
+      </div>
     </div>
     <div class="col">
-      <mat-card class="card">
-        <div class="row">
-          <div class="d-flex justify-content-between align-items-center">
-            <span>DOING</span>
-            <button mat-icon-button aria-label="New card">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
-          </div>
-
-          <div class="col-12 mt-1">
-            <mat-card
-              class="card-{{
-                selectedCard?.id !== cardDoing?.id ? 'gray' : 'white'
-              }} mt-2"
-              *ngFor="let cardDoing of cardsDoing"
-            >
-              <ng-container
-                *ngIf="selectedCard?.id !== cardDoing?.id; else input"
-              >
-                <div class="row">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <h3>{{ cardDoing?.titulo }}</h3>
-
-                    <div class="d-flex justify-content-end">
-                      <button
-                        mat-icon-button
-                        aria-label="Edit Card"
-                        (click)="selectCard(cardDoing)"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button
-                        mat-icon-button
-                        aria-label="Delete Card"
-                        (click)="deleteCard(cardDoing)"
-                      >
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-
-                  <p>{{ cardDoing?.conteudo }}</p>
-
-                  <div class="d-flex justify-content-between">
-                    <button
-                      mat-icon-button
-                      (click)="changeStepBefore(cardDoing)"
-                    >
-                      <mat-icon>chevron_left</mat-icon>
-                    </button>
-                    <button
-                      mat-icon-button
-                      (click)="changeStepAfter(cardDoing)"
-                    >
-                      <mat-icon>chevron_right</mat-icon>
-                    </button>
-                  </div>
-                </div>
-              </ng-container>
-
-              <ng-template #input>
-                <form [formGroup]="formUpdateCard">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <mat-form-field>
-                      <input
-                        formControlName="title"
-                        placeholder="Title"
-                        matInput
-                      />
-                    </mat-form-field>
-
-                    <button
-                      mat-icon-button
-                      aria-label="Edit Card"
-                      (click)="deSelect()"
-                    >
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  </div>
-
-                  <mat-form-field>
-                    <textarea
-                      placeholder="Content"
-                      matInput
-                      formControlName="content"
-                    ></textarea>
-                  </mat-form-field>
-
-                  <div class="d-flex justify-content-between">
-                    <button mat-button>Close</button>
-                    <button mat-button id="btn-update" (click)="updateCard()">
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </ng-template>
-            </mat-card>
-          </div>
+      <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
+          <span>DOING</span>
+          <button mat-icon-button aria-label="New card">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
         </div>
-      </mat-card>
+
+        <div class="col-12 mt-1">
+          <mat-card class="mt-2" *ngFor="let cardDoing of cardsDoing">
+            <ng-container
+              *ngIf="selectedCard?.id !== cardDoing?.id; else input"
+            >
+              <app-card-header
+                [card]="cardDoing"
+                (selectedCard)="selectCard($event)"
+                (deleteSelectedCard)="deleteCard($event)"
+              ></app-card-header>
+
+              <div class="row mt-4">
+                <p>{{ cardDoing?.conteudo }}</p>
+              </div>
+
+              <app-card-footer
+                [card]="cardDoing"
+                (changeStepCardBefore)="changeStepBefore($event)"
+                (changeStepCardAfter)="changeStepAfter($event)"
+              ></app-card-footer>
+            </ng-container>
+          </mat-card>
+        </div>
+      </div>
     </div>
     <div class="col">
-      <mat-card class="card">
-        <div class="row">
-          <div class="d-flex justify-content-between align-items-center">
-            <span>DONE</span>
-            <button mat-icon-button aria-label="New card">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
-          </div>
-          <div class="col-12 mt-1">
-            <mat-card
-              class="card-{{
-                selectedCard?.id !== cardDone?.id ? 'gray' : 'white'
-              }} mt-2"
-              *ngFor="let cardDone of cardsDone"
-            >
-              <ng-container
-                *ngIf="selectedCard?.id !== cardDone?.id; else input"
-              >
-                <div class="row">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <h3>{{ cardDone?.titulo }}</h3>
-
-                    <div class="d-flex justify-content-end">
-                      <button
-                        mat-icon-button
-                        aria-label="Edit Card"
-                        (click)="selectCard(cardDone)"
-                      >
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button
-                        mat-icon-button
-                        aria-label="Delete Card"
-                        (click)="deleteCard(cardDone)"
-                      >
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-
-                  <p>{{ cardDone?.conteudo }}</p>
-
-                  <div class="d-flex justify-content-between">
-                    <button
-                      mat-icon-button
-                      (click)="changeStepBefore(cardDone)"
-                    >
-                      <mat-icon>chevron_left</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="changeStepAfter(cardDone)">
-                      <mat-icon>chevron_right</mat-icon>
-                    </button>
-                  </div>
-                </div>
-              </ng-container>
-
-              <ng-template #input>
-                <form [formGroup]="formUpdateCard">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
-                    <mat-form-field>
-                      <input
-                        formControlName="title"
-                        placeholder="Title"
-                        matInput
-                      />
-                    </mat-form-field>
-
-                    <button
-                      mat-icon-button
-                      aria-label="Edit Card"
-                      (click)="deSelect()"
-                    >
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  </div>
-
-                  <mat-form-field>
-                    <textarea
-                      placeholder="Content"
-                      matInput
-                      formControlName="content"
-                    ></textarea>
-                  </mat-form-field>
-
-                  <div class="d-flex justify-content-between">
-                    <button mat-button>Close</button>
-                    <button mat-button id="btn-update" (click)="updateCard()">
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </ng-template>
-            </mat-card>
-          </div>
+      <div class="row">
+        <div class="d-flex justify-content-between align-items-center">
+          <span>DONE</span>
+          <button mat-icon-button aria-label="New card">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
         </div>
-      </mat-card>
+        <div class="col-12 mt-1">
+          <mat-card class="mt-2" *ngFor="let cardDone of cardsDone">
+            <ng-container *ngIf="selectedCard?.id !== cardDone?.id; else input">
+              <app-card-header
+                [card]="cardDone"
+                (selectedCard)="selectCard($event)"
+                (deleteSelectedCard)="deleteCard($event)"
+              ></app-card-header>
+
+              <div class="row mt-4">
+                <p>{{ cardDone?.conteudo }}</p>
+              </div>
+
+              <app-card-footer
+                [card]="cardDone"
+                (changeStepCardBefore)="changeStepBefore($event)"
+                (changeStepCardAfter)="changeStepAfter($event)"
+              ></app-card-footer>
+            </ng-container>
+          </mat-card>
+        </div>
+      </div>
     </div>
+    <ng-template #input>
+      <app-update-card
+        [selectedCard]="selectedCard"
+        (updateSelectedCard)="updateCard($event)"
+      ></app-update-card>
+    </ng-template>
   </div>
 </mat-card>

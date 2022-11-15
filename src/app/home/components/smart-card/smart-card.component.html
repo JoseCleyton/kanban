@@ -1,7 +1,7 @@
 <app-dumb-card
-  [cardsToDo]="cardsToDo"
-  [cardsDoing]="cardsDoing"
-  [cardsDone]="cardsDone"
+  [cardsToDo]="cardsToDoSmart"
+  [cardsDoing]="cardsDoingSmart"
+  [cardsDone]="cardsDoneSmart"
   (newCardEvent)="openModalNewCard()"
   (updateSelectedCard)="updateCard($event)"
   (deleteSelectedCard)="deleteCard($event)"

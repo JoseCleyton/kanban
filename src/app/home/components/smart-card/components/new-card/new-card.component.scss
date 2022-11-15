@@ -5,10 +5,10 @@ mat-form-field {
 ::ng-deep {
   #btn-save {
     background-color: white;
-    color: #3f51b5;
+    color: black;
   }
   #btn-save:disabled {
-    background-color: #3f51b5;
+    background-color: gray;
     color: white;
     cursor: not-allowed;
   }

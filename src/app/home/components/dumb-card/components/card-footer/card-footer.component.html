@@ -1,0 +1,16 @@
+<div
+  class="d-flex justify-content-{{
+    card?.lista !== steps.TO_DO ? 'between' : 'end'
+  }}"
+>
+  <button
+    mat-icon-button
+    (click)="changeStepBefore()"
+    *ngIf="card?.lista !== steps.TO_DO"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <button mat-icon-button (click)="changeStepAfter()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>

@@ -1,12 +1,12 @@
-import { OnDestroy } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { CardsService } from '@app/service/cards.service';
-import { Card } from '@model/card.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CardsService } from '../../../service/cards.service';
+import { Card } from '../../../model/card.model';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { NewCardComponent } from './components/new-card/new-card.component';
 import { DeleteCardComponent } from './components/delete-card/delete-card.component';
-import { Steps } from '@app/shared/enums/step.enum';
+import { Steps } from '../../../shared/enums/step.enum';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-smart-card',
@@ -14,12 +14,16 @@ import { Steps } from '@app/shared/enums/step.enum';
   styleUrls: ['./smart-card.component.scss']
 })
 export class SmartCardComponent implements OnInit, OnDestroy {
-  public cardsToDo: Card[] = [];
-  public cardsDoing: Card[] = [];
-  public cardsDone: Card[] = [];
+  public cardsToDoSmart: Card[] = [];
+  public cardsDoingSmart: Card[] = [];
+  public cardsDoneSmart: Card[] = [];
   public subscription = new Subscription();
 
-  constructor(private cardsService: CardsService, private dialog: MatDialog) {}
+  constructor(
+    private cardsService: CardsService,
+    private dialog: MatDialog,
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.findAllCards();
@@ -31,24 +35,27 @@ export class SmartCardComponent implements OnInit, OnDestroy {
 
   public findAllCards(): void {
     this.subscription.add(
-      this.cardsService.findAll().subscribe((data) => {
-        this.filterByToDo(data);
-        this.filterByDoing(data);
-        this.filterByDone(data);
-      })
+      this.cardsService.findAll().subscribe(
+        (data) => {
+          this.filterByToDo(data);
+          this.filterByDoing(data);
+          this.filterByDone(data);
+        },
+        (error) => this.toastrService.error(error.statusText)
+      )
     );
   }
 
   private filterByToDo(data: Card[]): void {
-    this.cardsToDo = data.filter((card) => card.lista === Steps.TO_DO);
+    this.cardsToDoSmart = data.filter((card) => card.lista === Steps.TO_DO);
   }
 
   private filterByDoing(data: Card[]): void {
-    this.cardsDoing = data.filter((card) => card.lista === Steps.DOING);
+    this.cardsDoingSmart = data.filter((card) => card.lista === Steps.DOING);
   }
 
   private filterByDone(data: Card[]): void {
-    this.cardsDone = data.filter((card) => card.lista === Steps.DONE);
+    this.cardsDoneSmart = data.filter((card) => card.lista === Steps.DONE);
   }
 
   public openModalNewCard(): void {
@@ -57,25 +64,35 @@ export class SmartCardComponent implements OnInit, OnDestroy {
     });
 
     dialogRefValue.afterClosed().subscribe((data) => {
-      const newCard: Card = {
-        titulo: data.get('title').value,
-        conteudo: data.get('content').value,
-        lista: 'todo'
-      };
+      if (data) {
+        const newCard: Card = {
+          titulo: data.get('title').value,
+          conteudo: data.get('content').value,
+          lista: 'todo'
+        };
 
-      this.subscription.add(
-        this.cardsService.createNewcard(newCard).subscribe(() => {
-          this.findAllCards();
-        })
-      );
+        this.subscription.add(
+          this.cardsService.createNewcard(newCard).subscribe(
+            () => {
+              this.toastrService.success('Success');
+              this.findAllCards();
+            },
+            (error) => this.toastrService.error(error.statusText)
+          )
+        );
+      }
     });
   }
 
   public updateCard(updatedCard: Card): void {
     this.subscription.add(
-      this.cardsService
-        .updateCard(updatedCard)
-        .subscribe(() => this.findAllCards())
+      this.cardsService.updateCard(updatedCard).subscribe(
+        () => {
+          this.toastrService.success('Success');
+          this.findAllCards();
+        },
+        (error) => this.toastrService.error(error.statusText)
+      )
     );
   }
 
@@ -88,11 +105,15 @@ export class SmartCardComponent implements OnInit, OnDestroy {
       dialogRefValue.afterClosed().subscribe((isDelete) => {
         if (isDelete) {
           this.subscription.add(
-            this.cardsService
-              .deleteCard(String(deleteCard.id))
-              .subscribe(() => {
-                this.findAllCards();
-              })
+            this.cardsService.deleteCard(String(deleteCard.id)).subscribe(
+              (data) => {
+                this.toastrService.success('Success');
+                this.filterByToDo(data);
+                this.filterByDoing(data);
+                this.filterByDone(data);
+              },
+              (error) => this.toastrService.error(error.statusText)
+            )
           );
         }
       })
@@ -102,14 +123,20 @@ export class SmartCardComponent implements OnInit, OnDestroy {
   public changeStepAfter(card: Card): void {
     card.lista = this.getStepAfter(card.lista);
     this.subscription.add(
-      this.cardsService.updateCard(card).subscribe(() => this.findAllCards())
+      this.cardsService.updateCard(card).subscribe(
+        () => this.findAllCards(),
+        (error) => this.toastrService.error(error.statusText)
+      )
     );
   }
 
   public changeStepBefore(card: Card): void {
     card.lista = this.getStepBefore(card.lista);
     this.subscription.add(
-      this.cardsService.updateCard(card).subscribe(() => this.findAllCards())
+      this.cardsService.updateCard(card).subscribe(
+        () => this.findAllCards(),
+        (error) => this.toastrService.error(error.statusText)
+      )
     );
   }
 

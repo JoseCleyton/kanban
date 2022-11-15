@@ -1,0 +1,30 @@
+<form [formGroup]="formUpdateCard">
+  <div class="d-flex justify-content-between align-items-center">
+    <mat-form-field>
+      <input formControlName="title" placeholder="Title" matInput />
+    </mat-form-field>
+
+    <button mat-icon-button aria-label="Edit Card" (click)="deSelect()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-form-field>
+    <textarea
+      placeholder="Content"
+      matInput
+      formControlName="content"
+    ></textarea>
+  </mat-form-field>
+
+  <div class="d-flex justify-content-end">
+    <button
+      mat-button
+      id="btn-update"
+      (click)="updateCard()"
+      [disabled]="formUpdateCard.invalid"
+    >
+      Update
+    </button>
+  </div>
+</form>

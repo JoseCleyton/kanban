@@ -10,6 +10,16 @@ body {
 }
 
 mat-dialog-container {
-  background: #3f51b5 !important;
+  background: black !important;
   color: white !important;
+  font-weight: bold;
+}
+
+mat-card {
+  background-color: white !important;
+  color: black !important;
+}
+
+.font-bold {
+  font-weight: bold;
 }

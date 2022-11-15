@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>{{ card?.titulo }}</div>
+
+    <div class="d-flex justify-content-end">
+      <button mat-icon-button aria-label="Edit Card" (click)="selectCard()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="Delete Card" (click)="deleteCard()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

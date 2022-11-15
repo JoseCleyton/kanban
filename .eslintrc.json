@@ -5,7 +5,7 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.json"],
+        "project": ["**/tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
@@ -41,7 +41,8 @@
         "no-console": "error",
         "no-loop-func": "warn",
         "camelcase": "warn",
-        "max-lines": "warn"
+        "max-lines": "warn",
+        "no-unused-vars": ["error"]
       }
     }
   ]
