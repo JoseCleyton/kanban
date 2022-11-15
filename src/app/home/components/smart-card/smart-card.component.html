@@ -1,0 +1,10 @@
+<app-dumb-card
+  [cardsToDo]="cardsToDo"
+  [cardsDoing]="cardsDoing"
+  [cardsDone]="cardsDone"
+  (newCardEvent)="openModalNewCard()"
+  (updateSelectedCard)="updateCard($event)"
+  (deleteSelectedCard)="deleteCard($event)"
+  (changeStepCardAfter)="changeStepAfter($event)"
+  (changeStepCardBefore)="changeStepBefore($event)"
+></app-dumb-card>
