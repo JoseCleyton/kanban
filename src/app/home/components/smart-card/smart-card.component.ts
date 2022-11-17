@@ -68,7 +68,7 @@ export class SmartCardComponent implements OnInit, OnDestroy {
         const newCard: Card = {
           titulo: data.get('title').value,
           conteudo: data.get('content').value,
-          lista: 'todo'
+          lista: Steps.TO_DO
         };
 
         this.subscription.add(
